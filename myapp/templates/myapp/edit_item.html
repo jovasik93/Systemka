@@ -1,0 +1,51 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Edit Item{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">Редактирование записи</h1>
+        <p>Вы редактируете запись: <strong>{{ item.serial_number }}</strong></p>
+
+        <!-- Форма подтверждения пароля -->
+        {% if not show_edit_form %}
+            <form method="post">
+                {% csrf_token %}
+                {{ password_form.as_p }}
+                <button type="submit" name="confirm_password" class="btn btn-primary">Подтвердить пароль</button>
+                <a href="{% url 'item_detail' item.id %}" class="btn btn-secondary">Отмена</a>
+            </form>
+        {% else %}
+            <!-- Форма редактирования записи -->
+            <form method="post" id="editForm">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#confirmModal">
+                    Сохранить изменения
+                </button>
+                <a href="{% url 'item_detail' item.id %}" class="btn btn-secondary">Отмена</a>
+            </form>
+
+            <!-- Модальное окно для подтверждения -->
+            <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmModalLabel">Подтверждение</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Вы уверены, что хотите сохранить изменения?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                            <button type="submit" form="editForm" name="edit_item" class="btn btn-primary">Сохранить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

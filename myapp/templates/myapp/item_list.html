@@ -1,0 +1,102 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Система учета Сертификатов{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Список сертификатов</h1>
+
+<!-- Форма загрузки файла -->
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Массовая загрузка</h5>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" name="upload_file" class="btn btn-primary">Загрузить</button>
+        </form>
+        {% if error %}
+            <div class="alert alert-danger mt-3">{{ error }}</div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Форма поиска и фильтрации -->
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Поиск и фильтры</h5>
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <label for="serial_number" class="form-label">Серийный номер</label>
+                <input type="text" name="serial_number" id="serial_number" class="form-control" value="{{ request.GET.serial_number }}">
+            </div>
+            <div class="col-md-3">
+                <label for="owner" class="form-label">Владелец</label>
+                <input type="text" name="owner" id="owner" class="form-control" value="{{ request.GET.owner }}">
+            </div>
+            <div class="col-md-3">
+                <label for="start_date" class="form-label">Дата начала</label>
+                <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request.GET.start_date }}">
+            </div>
+            <div class="col-md-3">
+                <label for="end_date" class="form-label">Дата окончания</label>
+                <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request.GET.end_date }}">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Применить фильтры</button>
+                <a href="{% url 'item_list' %}" class="btn btn-secondary">Сбросить фильтры</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Кнопка добавления новой записи -->
+<a href="{% url 'add_item' %}" class="btn btn-success mb-4">Добавить запись</a>
+
+<!-- Список всех записей -->
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Все сертификаты</h5>
+        <ul class="list-group">
+            {% for item in items %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <a href="{% url 'item_detail' item.id %}" class="text-decoration-none" title="{{ item.description }}">
+                            {{ item.serial_number }} - {{ item.owner }}
+                        </a>
+                        <br>
+                        <small class="text-muted">с {{ item.start_date }} по {{ item.end_date }}</small>
+                        <br>
+                        <small class="text-muted">{{ item.description }}</small>
+                    </div>
+                    <a href="{% url 'delete_item' item.id %}" class="btn btn-danger btn-sm">Удалить</a>
+                </li>
+            {% empty %}
+                <li class="list-group-item">Записей еще нет</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<!-- Список сертификатов, у которых до даты окончания осталось 3 или меньше месяцев -->
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Сертификаты которые закончатся в ближайшие 3 месяца</h5>
+        <ul class="list-group">
+            {% for item in expiring_items %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <a href="{% url 'item_detail' item.id %}" class="text-decoration-none" title="{{ item.description }}">
+                            {{ item.serial_number }} - {{ item.owner }}
+                        </a>
+                        <br>
+                        <small class="text-muted">с {{ item.start_date }} по {{ item.end_date }}</small>
+                    </div>
+                    <a href="{% url 'delete_item' item.id %}" class="btn btn-danger btn-sm">Удалить</a>
+                </li>
+            {% empty %}
+                <li class="list-group-item">Таких сертификатов еще нет</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

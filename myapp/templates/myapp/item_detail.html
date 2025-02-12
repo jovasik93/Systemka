@@ -1,0 +1,21 @@
+{% extends 'myapp/base.html' %}
+
+{% block title %}Полное представление{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">Полное представление</h1>
+        <p><strong>Серийный номер:</strong> {{ item.serial_number }}</p>
+        <p><strong>Владелец:</strong> {{ item.owner }}</p>
+        <p><strong>Дата начала:</strong> {{ item.start_date }}</p>
+        <p><strong>Дата окончания:</strong> {{ item.end_date }}</p>
+        <p><strong>Описание:</strong> {{ item.description }}</p>
+        <a href="{% url 'item_list' %}" class="btn btn-primary">Вернуться</a>
+
+        <!-- Кнопка редактирования -->
+        <a href="{% url 'edit_item' item.id %}" class="btn btn-primary">Редактировать</a>
+        <a href="{% url 'item_list' %}" class="btn btn-secondary">Назад к списку</a>
+    </div>
+</div>
+{% endblock %}
