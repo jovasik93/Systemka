@@ -138,8 +138,8 @@ DATETIME_INPUT_FORMATS = [
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Для сбора статических файлов
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # Дополнительные папки со статикой
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

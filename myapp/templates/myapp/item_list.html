@@ -5,6 +5,17 @@
 {% block content %}
 <h1 class="mb-4">Список сертификатов</h1>
 
+<!-- Кнопка экспорта в Excel -->
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Экспорт записей</h5>
+        <a href="{% url 'export_to_excel' %}" class="btn btn-success mb-4">Экспорт в Excel</a>
+        <div
+            <small class="text-muted">Нажмите чтобы экспортировать список всех записей в exel таблицу </small>
+        </div>
+    </div>
+</div>
+
 <!-- Форма загрузки файла -->
 <div class="card mb-4">
     <div class="card-body">

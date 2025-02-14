@@ -10,6 +10,8 @@ import pandas as pd
 from .forms import UploadFileForm, ItemEditForm, PasswordConfirmationForm
 from django.contrib.auth import authenticate
 from .models import Item
+from io import BytesIO
+from django.http import HttpResponse
 def home(request):
     if request.user.is_authenticated:
         return redirect('item_list')  # Перенаправление на item_list, если пользователь авторизован
@@ -170,3 +172,29 @@ def edit_item(request, item_id):
         'show_edit_form': False,
     })
 
+@login_required
+def export_to_excel(request):
+    # Получаем все записи из базы данных
+    items = Item.objects.all()
+
+    # Создаем DataFrame из данных
+    data = {
+        'Номер записи': [item.id for item in items],
+        'Серийный номер': [item.serial_number for item in items],
+        'Владелец': [item.owner for item in items],
+        'Дата начала': [item.start_date for item in items],
+        'Дата окончания': [item.end_date for item in items],
+        'Описание': [item.description for item in items],
+    }
+    df = pd.DataFrame(data)
+
+    # Создаем Excel-файл в памяти
+    output = BytesIO()
+    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+        df.to_excel(writer, index=False, sheet_name='Items')
+
+    # Настройка HTTP-ответа для скачивания файла
+    output.seek(0)
+    response = HttpResponse(output.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=items_export.xlsx'
+    return response
