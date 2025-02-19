@@ -3,27 +3,27 @@
 {% block title %}Система учета Сертификатов{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Список сертификатов</h1>
+<h1 class="mb-4" style="color: #0077FF">Список сертификатов</h1>
 
 <!-- Кнопка экспорта в Excel -->
 <div class="card mb-4">
     <div class="card-body">
-        <h5 class="card-title">Экспорт записей</h5>
-        <a href="{% url 'export_to_excel' %}" class="btn btn-success mb-4">Экспорт в Excel</a>
-        <div
-            <small class="text-muted">Нажмите чтобы экспортировать список всех записей в exel таблицу </small>
-        </div>
+        <h5 class="card-title" style="font-size: 15px; color:#0077FF">Экспорт записей</h5>
+        <a href="{% url 'export_to_excel' %}" class="btn btn-primary" style="font-size: 13px">Экспорт в Excel</a><br>
+
+        <small class="text-muted">Нажмите чтобы экспортировать список всех записей в exel таблицу </small>
+
     </div>
 </div>
 
 <!-- Форма загрузки файла -->
 <div class="card mb-4">
     <div class="card-body">
-        <h5 class="card-title">Массовая загрузка</h5>
-        <form method="post" enctype="multipart/form-data">
+        <h5 class="card-title" style="font-size: 15px; color:#0077FF">Массовая загрузка</h5>
+        <form method="post" enctype="multipart/form-data" style="font-size: 13px">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit" name="upload_file" class="btn btn-primary">Загрузить</button>
+            <button type="submit" name="upload_file" class="btn btn-primary" style="font-size: 13px">Загрузить</button>
         </form>
         {% if error %}
             <div class="alert alert-danger mt-3">{{ error }}</div>
@@ -34,7 +34,7 @@
 <!-- Форма поиска и фильтрации -->
 <div class="card mb-4">
     <div class="card-body">
-        <h5 class="card-title">Поиск и фильтры</h5>
+        <h5 class="card-title" style="color: #0077FF">Поиск и фильтры</h5>
         <form method="get" class="row g-3">
             <div class="col-md-3">
                 <label for="serial_number" class="form-label">Серийный номер</label>
@@ -60,13 +60,14 @@
     </div>
 </div>
 
+
 <!-- Кнопка добавления новой записи -->
-<a href="{% url 'add_item' %}" class="btn btn-success mb-4">Добавить запись</a>
+<a href="{% url 'add_item' %}" class="btn btn-primary">Добавить запись</a>
 
 <!-- Список всех записей -->
 <div class="card mb-4">
     <div class="card-body">
-        <h5 class="card-title">Все сертификаты</h5>
+        <h5 class="card-title" style="color: #0077FF">Все сертификаты</h5>
         <ul class="list-group">
             {% for item in items %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -91,7 +92,7 @@
 <!-- Список сертификатов, у которых до даты окончания осталось 3 или меньше месяцев -->
 <div class="card">
     <div class="card-body">
-        <h5 class="card-title">Сертификаты которые закончатся в ближайшие 3 месяца</h5>
+        <h5 class="card-title" style="color: red;">Сертификаты которые закончатся в ближайшие 3 месяца</h5>
         <ul class="list-group">
             {% for item in expiring_items %}
                 <li class="list-group-item d-flex justify-content-between align-items-center">
