@@ -76,7 +76,7 @@
                             {{ item.serial_number }} - {{ item.owner }}
                         </a>
                         <br>
-                        <small class="text-muted">с {{ item.start_date }} по {{ item.end_date }}</small>
+                        <small class="text-muted">с {{ item.start_date|date:"d.m.Y" }} по {{ item.end_date|date:"d.m.Y" }}</small>
                         <br>
                         <small class="text-muted">{{ item.description }}</small>
                     </div>
@@ -101,7 +101,7 @@
                             {{ item.serial_number }} - {{ item.owner }}
                         </a>
                         <br>
-                        <small class="text-muted">с {{ item.start_date }} по {{ item.end_date }}</small>
+                        <small class="text-muted">с {{ item.start_date|date:"d.m.Y" }} по {{ item.end_date|date:"d.m.Y" }}</small>
                     </div>
                     <a href="{% url 'delete_item' item.id %}" class="btn btn-danger btn-sm">Удалить</a>
                 </li>
